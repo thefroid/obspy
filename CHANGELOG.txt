@@ -34,6 +34,8 @@ master:
      (see #2104, #2090, #2093, #1872).
    * Skip invalid enumeration values during reading but raise a warning.
      (see #2106, #2098, #2095)
+ - obspy.io.segy:
+   * Raise nicer error messages when header packing fails (see #2194, #2196).
  - obspy.io.seiscomp:
    * Adding support for SC3ML 0.10 (see #2024).
  - obspy.io.sh:
