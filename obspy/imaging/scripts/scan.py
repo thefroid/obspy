@@ -34,6 +34,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 from future.builtins import *  # NOQA
 
+import fnmatch
 import os
 import sys
 import warnings
@@ -446,7 +447,21 @@ class Scanner(object):
             endtime = endtime.matplotlib_date
         # either use ids specified by user or use ids based on what data we
         # have parsed
-        ids = seed_ids or list(data.keys())
+        data_keys = list(data.keys())
+        if seed_ids is not None:
+            ids = []
+            for id_ in seed_ids:
+                # allow fnmatch type wildcards in given seed ids
+                if any(special in id_ for special in '*?[]!'):
+                    ids.extend(fnmatch.filter(data_keys, id_))
+                else:
+                    ids.append(id_)
+            # make sure we don't have duplicates in case multiple wildcard
+            # patterns were given and some ids were matched by more than one
+            # pattern
+            ids = list(set(ids))
+        else:
+            ids = data_keys
         ids = sorted(ids)[::-1]
         if self.verbose:
             print('\n')
