@@ -900,8 +900,8 @@ class Unpickler(object):
 
                 public_id = "amplitude/%s" % line_id
                 amplitude.resource_id = self._get_res_id(public_id)
-                flag_sta_mag = False
-
+                event.amplitudes.append(amplitude)
+                
                 for i in [0, 1]:
                     sta_mag = StationMagnitude()
                     sta_mag.creation_info = self._get_creation_info()
@@ -912,12 +912,9 @@ class Unpickler(object):
                         sta_mag.mag = magnitude_values[i]
                     except ValueError:
                         continue
-                    flag_sta_mag = True
                     public_id = "magnitude/station/%s/%s" % (line_id, i)
                     sta_mag.resource_id = self._get_res_id(public_id)
                     event.station_magnitudes.append(sta_mag)
-                if flag_sta_mag:
-                    event.amplitudes.append(amplitude)
             except ValueError:
                 pass
 
